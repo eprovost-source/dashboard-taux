@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taux Hypothécaires — Apoint</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh}
+.container{max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
+.hdr{padding-bottom:1.5rem;border-bottom:1px solid #e5e3de;margin-bottom:1.5rem}
+.hdr h1{font-size:24px;font-weight:600;color:#1a1a1a}
+.hdr p{font-size:14px;color:#6b6a65;margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:1.5rem}
+.stat{background:#fff;border:0.5px solid #e5e3de;border-radius:12px;padding:1rem}
+.stat-label{font-size:12px;color:#6b6a65;margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:600;color:#1a1a1a}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem;align-items:center}
+.filters label{font-size:13px;color:#6b6a65;font-weight:500}
+select{font-size:13px;padding:7px 12px;border:0.5px solid #ccc;border-radius:8px;background:#fff;color:#1a1a1a;cursor:pointer;outline:none}
+select:focus{border-color:#888}
+.tabs{display:flex;gap:0;margin-bottom:1.5rem;border-bottom:1px solid #e5e3de}
+.tab{padding:10px 20px;font-size:14px;cursor:pointer;border:none;background:none;color:#6b6a65;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500}
+.tab:hover{color:#1a1a1a}
+.tab.active{color:#1a1a1a;border-bottom:2px solid #1a1a1a}
+.tbl-wrap{overflow-x:auto;background:#fff;border:0.5px solid #e5e3de;border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 14px;font-weight:500;font-size:12px;color:#6b6a65;border-bottom:0.5px solid #e5e3de;white-space:nowrap;background:#fafaf8}
+td{padding:10px 14px;border-bottom:0.5px solid #f0ede8;color:#1a1a1a}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafaf8}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:500}
+.badge-fixe{background:#dbeafe;color:#1e40af}
+.badge-variable{background:#fef3c7;color:#92400e}
+.taux-val{font-weight:600;font-family:'SF Mono',monospace;font-size:13px}
+.taux-pos{color:#065f46}
+.taux-neg{color:#991b1b}
+.taux-neu{color:#1a1a1a}
+.chip{font-size:11px;color:#6b6a65;background:#f0ede8;padding:2px 8px;border-radius:6px;white-space:nowrap}
+.section-title{font-size:16px;font-weight:600;color:#1a1a1a;margin-bottom:0.75rem;padding-bottom:8px;border-bottom:0.5px solid #e5e3de}
+.section-wrap{margin-bottom:2rem}
+.empty{text-align:center;padding:3rem;color:#6b6a65;font-size:14px}
+.loading{text-align:center;padding:3rem;color:#6b6a65;font-size:14px}
+.error{text-align:center;padding:2rem;color:#991b1b;font-size:14px;background:#fef2f2;border-radius:12px;border:0.5px solid #fca5a5}
+.terme-hdr{display:flex;align-items:center;gap:8px;margin:1.5rem 0 0.75rem;padding-bottom:8px;border-bottom:0.5px solid #e5e3de}
+.terme-hdr span{font-size:15px;font-weight:600}
+@media(max-width:600px){
+  .filters{flex-direction:column;align-items:flex-start}
+  .stats{grid-template-columns:1fr 1fr}
+  td,th{padding:8px 10px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hdr">
+  <h1>Taux hypothécaires</h1>
+  <p id="last-update">Chargement en cours...</p>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-label">Prêteurs</div><div class="stat-val" id="stat-preteurs">—</div></div>
+  <div class="stat"><div class="stat-label">Produits</div><div class="stat-val" id="stat-produits">—</div></div>
+  <div class="stat"><div class="stat-label">Taux le plus bas</div><div class="stat-val" id="stat-min">—</div></div>
+  <div class="stat"><div class="stat-label">Dernière mise à jour</div><div class="stat-val" id="stat-date" style="font-size:15px">—</div></div>
+</div>
+
+<div class="filters">
+  <label>Terme</label>
+  <select id="f-terme"><option value="">Tous</option></select>
+  <label>Type</label>
+  <select id="f-type"><option value="">Tous</option><option value="fixe">Fixe</option><option value="variable">Variable</option></select>
+  <label>RPV</label>
+  <select id="f-rpv"><option value="">Tous</option></select>
+  <label>Prêteur</label>
+  <select id="f-preteur"><option value="">Tous</option></select>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('comparaison',this)">Comparaison</button>
+  <button class="tab" onclick="switchTab('grille',this)">Grille par prêteur</button>
+  <button class="tab" onclick="switchTab('historique',this)">Historique</button>
+</div>
+
+<div id="tab-comparaison"></div>
+<div id="tab-grille" style="display:none"></div>
+<div id="tab-historique" style="display:none"></div>
+
+</div>
+
+<script>
+const SUPA_URL = 'https://oitfhcjqjgeupvosyqja.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pdGZoY2pxamdldXB2b3N5cWphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MzIwOTMsImV4cCI6MjA5MTEwODA5M30.KxIjHqNvMs2WTfUp7fgTuES1cbWsijTCHhVjlN6g4aE';
+
+let allData = [];
+let activeTab = 'comparaison';
+
+async function fetchData() {
+  document.getElementById('tab-comparaison').innerHTML = '<div class="loading">Chargement des taux...</div>';
+  try {
+    const res = await fetch(`${SUPA_URL}/rest/v1/taux_preteurs?select=*&order=date_effectif.desc,preteur.asc,terme.asc&limit=2000`, {
+      headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` }
+    });
+    if (!res.ok) throw new Error('Erreur API Supabase: ' + res.status);
+    allData = await res.json();
+    initFilters();
+    updateStats();
+    render();
+    document.getElementById('last-update').textContent = `Données en temps réel · ${allData.length} entrées · ${new Date().toLocaleString('fr-CA')}`;
+  } catch(e) {
+    document.getElementById('tab-comparaison').innerHTML = `<div class="error">Impossible de charger les données.<br><small>${e.message}</small></div>`;
+    document.getElementById('last-update').textContent = 'Erreur de connexion';
+  }
+}
+
+function getFilters() {
+  return {
+    terme: document.getElementById('f-terme').value,
+    type: document.getElementById('f-type').value,
+    rpv: document.getElementById('f-rpv').value,
+    preteur: document.getElementById('f-preteur').value
+  };
+}
+
+function filtered() {
+  const f = getFilters();
+  return allData.filter(r =>
+    (!f.terme || r.terme === f.terme) &&
+    (!f.type || r.type_taux === f.type) &&
+    (!f.rpv || r.rpv === f.rpv) &&
+    (!f.preteur || r.preteur === f.preteur)
+  );
+}
+
+const termeOrder = ['6 mois','1 an','2 ans','3 ans','4 ans','5 ans','6 ans','7 ans','10 ans','variable'];
+
+function sortTerme(a, b) {
+  return termeOrder.indexOf(a) - termeOrder.indexOf(b);
+}
+
+function initFilters() {
+  const termes = [...new Set(allData.map(r=>r.terme).filter(Boolean))].sort(sortTerme);
+  const rpvs = [...new Set(allData.map(r=>r.rpv).filter(Boolean))].sort();
+  const preteurs = [...new Set(allData.map(r=>r.preteur).filter(Boolean))].sort();
+  const ft = document.getElementById('f-terme');
+  const fr = document.getElementById('f-rpv');
+  const fp = document.getElementById('f-preteur');
+  termes.forEach(t => { const o=document.createElement('option'); o.value=t; o.textContent=t; ft.appendChild(o); });
+  rpvs.forEach(t => { const o=document.createElement('option'); o.value=t; o.textContent=t; fr.appendChild(o); });
+  preteurs.forEach(t => { const o=document.createElement('option'); o.value=t; o.textContent=t; fp.appendChild(o); });
+  ['f-terme','f-type','f-rpv','f-preteur'].forEach(id => {
+    document.getElementById(id).addEventListener('change', () => { updateStats(); render(); });
+  });
+}
+
+function updateStats() {
+  const data = filtered();
+  const preteurs = new Set(data.map(r=>r.preteur));
+  const produits = new Set(data.map(r=>r.produit));
+  const fixeOnly = data.filter(r => r.type_taux==='fixe' && r.taux > 1);
+  const minTaux = fixeOnly.length ? Math.min(...fixeOnly.map(r=>r.taux)) : null;
+  const latest = data.reduce((a,b) => ((a.date_effectif||'') > (b.date_effectif||'') ? a : b), {});
+  document.getElementById('stat-preteurs').textContent = preteurs.size;
+  document.getElementById('stat-produits').textContent = produits.size;
+  document.getElementById('stat-min').textContent = minTaux ? minTaux.toFixed(2)+'%' : '—';
+  document.getElementById('stat-date').textContent = latest.date_effectif || '—';
+}
+
+function fmtTaux(t, type) {
+  if (t === null || t === undefined) return '—';
+  const n = parseFloat(t);
+  if (type === 'variable') {
+    const sign = n >= 0 ? '+' : '';
+    const cls = n < 0 ? 'taux-neg' : 'taux-pos';
+    return `<span class="taux-val ${cls}">${sign}${n.toFixed(2)}%</span>`;
+  }
+  return `<span class="taux-val taux-neu">${n.toFixed(2)}%</span>`;
+}
+
+function badge(type) {
+  return type === 'fixe'
+    ? '<span class="badge badge-fixe">fixe</span>'
+    : '<span class="badge badge-variable">variable</span>';
+}
+
+function switchTab(tab, el) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['comparaison','grille','historique'].forEach(t => {
+    document.getElementById('tab-'+t).style.display = t===tab ? 'block' : 'none';
+  });
+  render();
+}
+
+function render() {
+  if (activeTab === 'comparaison') renderComparaison();
+  else if (activeTab === 'grille') renderGrille();
+  else renderHistorique();
+}
+
+function renderComparaison() {
+  const data = filtered();
+  const el = document.getElementById('tab-comparaison');
+  if (!data.length) { el.innerHTML = '<div class="empty">Aucun taux pour ces filtres.</div>'; return; }
+
+  const byTermeType = {};
+  data.forEach(r => {
+    const key = `${r.terme}|||${r.type_taux}`;
+    if (!byTermeType[key]) byTermeType[key] = [];
+    byTermeType[key].push(r);
+  });
+
+  const keys = Object.keys(byTermeType).sort((a,b) => {
+    const [ta] = a.split('|||'); const [tb] = b.split('|||');
+    return sortTerme(ta, tb);
+  });
+
+  let html = '';
+  keys.forEach(key => {
+    const [terme, type] = key.split('|||');
+    const rows = byTermeType[key];
+    html += `<div class="terme-hdr"><span>${terme}</span>${badge(type)}</div>
+    <div class="tbl-wrap" style="margin-bottom:1.5rem"><table>
+      <tr><th>Prêteur</th><th>Produit</th><th>RPV</th><th>Taux</th><th>En vigueur</th></tr>`;
+    rows.sort((a,b) => {
+      const ta = parseFloat(a.taux)||999, tb = parseFloat(b.taux)||999;
+      return type === 'variable' ? ta - tb : ta - tb;
+    }).forEach(r => {
+      html += `<tr>
+        <td><strong>${r.preteur||'—'}</strong></td>
+        <td style="color:#6b6a65;font-size:12px">${r.produit||'—'}</td>
+        <td><span class="chip">${r.rpv||'—'}</span></td>
+        <td>${fmtTaux(r.taux, r.type_taux)}</td>
+        <td><span class="chip">${r.date_effectif||'—'}</span></td>
+      </tr>`;
+    });
+    html += '</table></div>';
+  });
+  el.innerHTML = html;
+}
+
+function renderGrille() {
+  const data = filtered();
+  const el = document.getElementById('tab-grille');
+  if (!data.length) { el.innerHTML = '<div class="empty">Aucun taux pour ces filtres.</div>'; return; }
+
+  const byPreteur = {};
+  data.forEach(r => {
+    if (!byPreteur[r.preteur]) byPreteur[r.preteur] = [];
+    byPreteur[r.preteur].push(r);
+  });
+
+  let html = '';
+  Object.entries(byPreteur).sort().forEach(([preteur, rows]) => {
+    html += `<div class="section-wrap">
+      <div class="section-title">${preteur}</div>
+      <div class="tbl-wrap"><table>
+        <tr><th>Produit</th><th>Type</th><th>Terme</th><th>RPV</th><th>Taux</th><th>En vigueur</th></tr>`;
+    rows.sort((a,b) => sortTerme(a.terme||'', b.terme||'')).forEach(r => {
+      html += `<tr>
+        <td style="color:#6b6a65;font-size:12px">${r.produit||'—'}</td>
+        <td>${badge(r.type_taux)}</td>
+        <td><strong>${r.terme||'—'}</strong></td>
+        <td><span class="chip">${r.rpv||'—'}</span></td>
+        <td>${fmtTaux(r.taux, r.type_taux)}</td>
+        <td><span class="chip">${r.date_effectif||'—'}</span></td>
+      </tr>`;
+    });
+    html += '</table></div></div>';
+  });
+  el.innerHTML = html;
+}
+
+function renderHistorique() {
+  const data = filtered();
+  const el = document.getElementById('tab-historique');
+  if (!data.length) { el.innerHTML = '<div class="empty">Aucun taux pour ces filtres.</div>'; return; }
+
+  const byDate = {};
+  data.forEach(r => {
+    const d = r.date_effectif || 'Date inconnue';
+    if (!byDate[d]) byDate[d] = [];
+    byDate[d].push(r);
+  });
+
+  let html = '';
+  Object.entries(byDate).sort((a,b) => b[0].localeCompare(a[0])).forEach(([date, rows]) => {
+    const preteurs = [...new Set(rows.map(r=>r.preteur))].sort().join(', ');
+    html += `<div class="section-wrap">
+      <div class="section-title">${date} <span style="font-size:12px;font-weight:400;color:#6b6a65">(${rows.length} entrées · ${preteurs})</span></div>
+      <div class="tbl-wrap"><table>
+        <tr><th>Prêteur</th><th>Produit</th><th>Type</th><th>Terme</th><th>RPV</th><th>Taux</th></tr>`;
+    rows.sort((a,b) => (a.preteur||'').localeCompare(b.preteur||'')).forEach(r => {
+      html += `<tr>
+        <td><strong>${r.preteur||'—'}</strong></td>
+        <td style="color:#6b6a65;font-size:12px">${r.produit||'—'}</td>
+        <td>${badge(r.type_taux)}</td>
+        <td>${r.terme||'—'}</td>
+        <td><span class="chip">${r.rpv||'—'}</span></td>
+        <td>${fmtTaux(r.taux, r.type_taux)}</td>
+      </tr>`;
+    });
+    html += '</table></div></div>';
+  });
+  el.innerHTML = html;
+}
+
+fetchData();
+</script>
+</body>
+</html>
