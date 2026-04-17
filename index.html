@@ -4,88 +4,398 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Taux Hypothécaires — Apoint</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh}
-.container{max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
-.hdr{padding-bottom:1.5rem;border-bottom:1px solid #e5e3de;margin-bottom:1.5rem}
-.hdr h1{font-size:24px;font-weight:600;color:#1a1a1a}
-.hdr p{font-size:14px;color:#6b6a65;margin-top:4px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:1.5rem}
-.stat{background:#fff;border:0.5px solid #e5e3de;border-radius:12px;padding:1rem}
-.stat-label{font-size:12px;color:#6b6a65;margin-bottom:4px}
-.stat-val{font-size:22px;font-weight:600;color:#1a1a1a}
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem;align-items:center}
-.filters label{font-size:13px;color:#6b6a65;font-weight:500}
-select{font-size:13px;padding:7px 12px;border:0.5px solid #ccc;border-radius:8px;background:#fff;color:#1a1a1a;cursor:pointer;outline:none}
-select:focus{border-color:#888}
-.tabs{display:flex;gap:0;margin-bottom:1.5rem;border-bottom:1px solid #e5e3de}
-.tab{padding:10px 20px;font-size:14px;cursor:pointer;border:none;background:none;color:#6b6a65;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500}
-.tab:hover{color:#1a1a1a}
-.tab.active{color:#1a1a1a;border-bottom:2px solid #1a1a1a}
-.tbl-wrap{overflow-x:auto;background:#fff;border:0.5px solid #e5e3de;border-radius:12px}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:10px 14px;font-weight:500;font-size:12px;color:#6b6a65;border-bottom:0.5px solid #e5e3de;white-space:nowrap;background:#fafaf8}
-td{padding:10px 14px;border-bottom:0.5px solid #f0ede8;color:#1a1a1a}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:#fafaf8}
-.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:500}
-.badge-fixe{background:#dbeafe;color:#1e40af}
-.badge-variable{background:#fef3c7;color:#92400e}
-.taux-val{font-weight:600;font-family:'SF Mono',monospace;font-size:13px}
-.taux-pos{color:#065f46}
-.taux-neg{color:#991b1b}
-.taux-neu{color:#1a1a1a}
-.chip{font-size:11px;color:#6b6a65;background:#f0ede8;padding:2px 8px;border-radius:6px;white-space:nowrap}
-.section-title{font-size:16px;font-weight:600;color:#1a1a1a;margin-bottom:0.75rem;padding-bottom:8px;border-bottom:0.5px solid #e5e3de}
-.section-wrap{margin-bottom:2rem}
-.empty{text-align:center;padding:3rem;color:#6b6a65;font-size:14px}
-.loading{text-align:center;padding:3rem;color:#6b6a65;font-size:14px}
-.error{text-align:center;padding:2rem;color:#991b1b;font-size:14px;background:#fef2f2;border-radius:12px;border:0.5px solid #fca5a5}
-.terme-hdr{display:flex;align-items:center;gap:8px;margin:1.5rem 0 0.75rem;padding-bottom:8px;border-bottom:0.5px solid #e5e3de}
-.terme-hdr span{font-size:15px;font-weight:600}
-@media(max-width:600px){
-  .filters{flex-direction:column;align-items:flex-start}
-  .stats{grid-template-columns:1fr 1fr}
-  td,th{padding:8px 10px;font-size:12px}
+:root {
+  --rose:        #e8427c;
+  --rose-hover:  #d4356c;
+  --rose-light:  #fdf0f5;
+  --noir:        #111111;
+  --gris-fonce:  #3a3a3a;
+  --gris:        #6b6b6b;
+  --gris-clair:  #e8e8e8;
+  --fond:        #f7f7f7;
+  --blanc:       #ffffff;
+  --border:      #ebebeb;
+  --shadow-sm:   0 1px 4px rgba(0,0,0,0.06);
+  --shadow-md:   0 4px 20px rgba(0,0,0,0.08);
+  --radius:      14px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--fond);
+  color: var(--noir);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HEADER */
+.header {
+  background: var(--blanc);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2.5rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: var(--shadow-sm);
+}
+.header-logo img { height: 36px; width: auto; display: block; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.header-pill {
+  background: var(--rose-light);
+  color: var(--rose);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.header-update { font-size: 12px; color: var(--gris); }
+
+/* HERO */
+.hero {
+  background: var(--blanc);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 2.5rem 1.75rem;
+}
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 34px;
+  color: var(--noir);
+  line-height: 1.15;
+}
+.hero h1 em { color: var(--rose); font-style: italic; }
+
+/* CONTAINER */
+.container { max-width: 1400px; margin: 0 auto; padding: 2rem 2.5rem; }
+
+/* STATS */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 2rem;
+}
+.stat {
+  background: var(--blanc);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.stat::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gris-clair);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.stat:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.stat.hero-stat::after { background: var(--rose); }
+.stat-label {
+  font-size: 11px; font-weight: 600; color: var(--gris);
+  text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 10px;
+}
+.stat-val {
+  font-size: 28px; font-weight: 700; color: var(--noir);
+  line-height: 1; letter-spacing: -0.02em;
+}
+.stat.hero-stat .stat-val { color: var(--rose); }
+.stat-sub { font-size: 12px; color: var(--gris); margin-top: 6px; font-weight: 500; }
+
+/* FILTERS */
+.filters-card {
+  background: var(--blanc);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+  box-shadow: var(--shadow-sm);
+}
+.filter-group { display: flex; flex-direction: column; gap: 5px; }
+.filter-group label {
+  font-size: 10px; font-weight: 700; color: var(--gris);
+  text-transform: uppercase; letter-spacing: 0.09em;
+}
+select {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 500;
+  padding: 8px 30px 8px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  background: var(--fond);
+  color: var(--noir);
+  cursor: pointer; outline: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b6b6b' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  min-width: 135px;
+  transition: border-color 0.15s;
+}
+select:focus { border-color: var(--rose); background-color: var(--blanc); }
+.btn-reset {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 600;
+  padding: 8px 18px;
+  border: 1.5px solid var(--rose);
+  border-radius: 9px;
+  background: transparent; color: var(--rose);
+  cursor: pointer; transition: all 0.15s; align-self: flex-end;
+}
+.btn-reset:hover { background: var(--rose); color: var(--blanc); }
+
+/* TABS */
+.tabs-wrap {
+  display: flex; gap: 0;
+  margin-bottom: 1.5rem;
+  background: var(--blanc);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px;
+  width: fit-content;
+  box-shadow: var(--shadow-sm);
+}
+.tab {
+  padding: 9px 22px;
+  font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 600;
+  cursor: pointer; border: none; background: transparent;
+  color: var(--gris); border-radius: 9px; transition: all 0.15s; white-space: nowrap;
+}
+.tab:hover:not(.active) { color: var(--noir); background: var(--fond); }
+.tab.active {
+  background: var(--rose); color: var(--blanc);
+  box-shadow: 0 2px 10px rgba(232,66,124,0.30);
+}
+
+/* SECTION HEADERS */
+.terme-hdr {
+  display: flex; align-items: center; gap: 10px;
+  margin: 2rem 0 0.9rem;
+}
+.terme-bar {
+  width: 4px; height: 22px;
+  background: var(--rose); border-radius: 2px; flex-shrink: 0;
+}
+.terme-label {
+  font-family: 'DM Serif Display', serif;
+  font-size: 19px; color: var(--noir);
+}
+.terme-count {
+  font-size: 12px; color: var(--gris); font-weight: 500;
+  background: var(--fond); border: 1px solid var(--border);
+  padding: 2px 9px; border-radius: 20px;
+}
+.section-wrap { margin-bottom: 2.5rem; }
+.section-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 1rem; padding-bottom: 12px;
+  border-bottom: 2px solid var(--border);
+}
+.section-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 21px; color: var(--noir);
+}
+
+/* TABLE */
+.tbl-wrap {
+  overflow-x: auto;
+  background: var(--blanc);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.5rem;
+}
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead tr { background: var(--fond); }
+th {
+  text-align: left; padding: 11px 16px;
+  font-size: 10px; font-weight: 700; color: var(--gris);
+  text-transform: uppercase; letter-spacing: 0.09em;
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+td { padding: 11px 16px; border-bottom: 1px solid #f2f2f2; vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tbody tr { transition: background 0.1s; }
+tbody tr:hover td { background: #fdf8fb; }
+
+/* LOGO */
+.preteur-cell { display: flex; align-items: center; gap: 12px; }
+.logo-box {
+  width: 68px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--fond); border: 1px solid var(--border);
+  border-radius: 8px; flex-shrink: 0; padding: 5px;
+}
+.logo-box img {
+  max-width: 100%; max-height: 100%;
+  width: auto; height: auto;
+  object-fit: contain; display: block;
+}
+.logo-box-lg { width: 84px; height: 46px; }
+.preteur-name { font-weight: 600; font-size: 13px; color: var(--noir); white-space: nowrap; }
+
+/* BADGES */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px; border-radius: 20px;
+  font-size: 11px; font-weight: 600; white-space: nowrap;
+}
+.b-fixe     { background: #e8f4ff; color: #1565c0; }
+.b-var      { background: #fff8e1; color: #e65100; }
+.b-assure   { background: #e8f5e9; color: #1b5e20; }
+.b-assur2   { background: #e3f2fd; color: #0d47a1; }
+.b-conv     { background: #f5f5f5; color: #424242; }
+.b-nonass   { background: #fce4ec; color: #880e4f; }
+
+/* TAUX */
+.tv { font-size: 14px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.t-abs { color: var(--noir); }
+.t-neg { color: #1b8f5c; }
+.t-pos { color: #c04c00; }
+
+/* CHIPS */
+.chip {
+  display: inline-block; font-size: 11px; font-weight: 500;
+  color: var(--gris); background: var(--fond);
+  border: 1px solid var(--border);
+  padding: 3px 9px; border-radius: 20px; white-space: nowrap;
+}
+.chip-na { color: #ccc; font-style: italic; border-color: transparent; background: transparent; }
+
+/* STATES */
+.empty { text-align: center; padding: 5rem 2rem; color: var(--gris); }
+.empty-ico { font-size: 36px; margin-bottom: 12px; }
+.empty p { font-size: 14px; }
+.loading-wrap {
+  text-align: center; padding: 5rem 2rem; color: var(--gris);
+  font-size: 14px; display: flex; align-items: center;
+  justify-content: center; gap: 12px;
+}
+.spinner {
+  width: 20px; height: 20px;
+  border: 2px solid var(--gris-clair);
+  border-top-color: var(--rose);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite; flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.error-wrap {
+  padding: 2rem; color: #c62828; font-size: 13px;
+  background: #fff5f5; border-radius: var(--radius);
+  border: 1px solid #ffcdd2; text-align: center;
+}
+
+@media (max-width: 1100px) { .stats { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) {
+  .header { padding: 0 1.25rem; }
+  .hero { padding: 1.5rem 1.25rem 1.25rem; }
+  .hero h1 { font-size: 26px; }
+  .container { padding: 1.5rem 1.25rem; }
+  .stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-val { font-size: 22px; }
+  select { min-width: 110px; font-size: 12px; }
+  th, td { padding: 9px 12px; font-size: 12px; }
+  .logo-box { width: 56px; height: 32px; }
+  .tabs-wrap { width: 100%; }
+  .tab { flex: 1; text-align: center; padding: 9px 8px; font-size: 12px; }
 }
 </style>
 </head>
 <body>
+
+<header class="header">
+  <div class="header-logo">
+    <img src="https://apoint.ca/wp-content/uploads/2022/07/Apoint-Logo-RGB-Hypotheque-Rose-e1663164011833-300x146.png"
+         alt="apoint"
+         onerror="this.parentElement.innerHTML='<span style=\'font-family:DM Serif Display,serif;font-size:22px;color:#e8427c;font-style:italic\'>apoint</span>'">
+  </div>
+  <div class="header-right">
+    <span class="header-pill">Interne</span>
+    <span class="header-update" id="last-update">Chargement...</span>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>Taux <em>hypothécaires</em></h1>
+</div>
+
 <div class="container">
 
-<div class="hdr">
-  <h1>Taux hypothécaires</h1>
-  <p id="last-update">Chargement en cours...</p>
-</div>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Prêteurs actifs</div>
+      <div class="stat-val" id="stat-preteurs">—</div>
+    </div>
+    <div class="stat hero-stat">
+      <div class="stat-label">Taux le plus bas</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:4px">
+        <div id="stat-min-logo"></div>
+        <div class="stat-val" id="stat-min">—</div>
+      </div>
+      <div class="stat-sub" id="stat-min-preteur">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Dernière mise à jour</div>
+      <div class="stat-val" id="stat-date" style="font-size:17px;letter-spacing:0">—</div>
+    </div>
 
-<div class="stats">
-  <div class="stat"><div class="stat-label">Prêteurs</div><div class="stat-val" id="stat-preteurs">—</div></div>
-  <div class="stat"><div class="stat-label">Produits</div><div class="stat-val" id="stat-produits">—</div></div>
-  <div class="stat"><div class="stat-label">Taux le plus bas</div><div class="stat-val" id="stat-min">—</div></div>
-  <div class="stat"><div class="stat-label">Dernière mise à jour</div><div class="stat-val" id="stat-date" style="font-size:15px">—</div></div>
-</div>
+  </div>
 
-<div class="filters">
-  <label>Terme</label>
-  <select id="f-terme"><option value="">Tous</option></select>
-  <label>Type</label>
-  <select id="f-type"><option value="">Tous</option><option value="fixe">Fixe</option><option value="variable">Variable</option></select>
-  <label>RPV</label>
-  <select id="f-rpv"><option value="">Tous</option></select>
-  <label>Prêteur</label>
-  <select id="f-preteur"><option value="">Tous</option></select>
-</div>
+  <div class="filters-card">
+    <div class="filter-group">
+      <label>Terme</label>
+      <select id="f-terme"><option value="">Tous</option></select>
+    </div>
+    <div class="filter-group">
+      <label>Type de taux</label>
+      <select id="f-type">
+        <option value="">Tous</option>
+        <option value="fixe">Fixe</option>
+        <option value="variable">Variable</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Transaction</label>
+      <select id="f-transaction"><option value="">Tous</option></select>
+    </div>
+    <div class="filter-group">
+      <label>RPV</label>
+      <select id="f-rpv"><option value="">Tous</option></select>
+    </div>
+    <div class="filter-group">
+      <label>Montant</label>
+      <select id="f-montant"><option value="">Tous</option></select>
+    </div>
+    <div class="filter-group">
+      <label>Cote crédit</label>
+      <select id="f-cote"><option value="">Tous</option></select>
+    </div>
+    <div class="filter-group">
+      <label>Prêteur</label>
+      <select id="f-preteur"><option value="">Tous</option></select>
+    </div>
+    <button class="btn-reset" onclick="resetFilters()">↺ Réinitialiser</button>
+  </div>
 
-<div class="tabs">
-  <button class="tab active" onclick="switchTab('comparaison',this)">Comparaison</button>
-  <button class="tab" onclick="switchTab('grille',this)">Grille par prêteur</button>
-  <button class="tab" onclick="switchTab('historique',this)">Historique</button>
-</div>
+  <div class="tabs-wrap">
+    <button class="tab active" onclick="switchTab('comparaison',this)">Comparaison</button>
+    <button class="tab" onclick="switchTab('grille',this)">Par prêteur</button>
+    <button class="tab" onclick="switchTab('historique',this)">Historique</button>
+  </div>
 
-<div id="tab-comparaison"></div>
-<div id="tab-grille" style="display:none"></div>
-<div id="tab-historique" style="display:none"></div>
+  <div id="tab-comparaison"></div>
+  <div id="tab-grille" style="display:none"></div>
+  <div id="tab-historique" style="display:none"></div>
 
 </div>
 
@@ -93,218 +403,248 @@ tr:hover td{background:#fafaf8}
 const SUPA_URL = 'https://oitfhcjqjgeupvosyqja.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pdGZoY2pxamdldXB2b3N5cWphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MzIwOTMsImV4cCI6MjA5MTEwODA5M30.KxIjHqNvMs2WTfUp7fgTuES1cbWsijTCHhVjlN6g4aE';
 
-let allData = [];
-let activeTab = 'comparaison';
+const LOGOS = {
+  'TD':              'logos/td.png',
+  'CIBC':            'logos/cibc.jpg',
+  'Desjardins':      'logos/desjardins.png',
+  'Scotia':          'logos/scotiabank.png',
+  'Banque Nationale':'logos/bnc.png',
+  'First National':  'logos/first-national.png',
+  'MERIX':           'logos/merix.png',
+  'MCAP':            'logos/mcap.png',
+  'Wiseday':         'logos/wiseday.png',
+  'CMLS':            'logos/cmls.png',
+  'Manuvie':         'logos/manuvie.png',
+  'Haventree':       'logos/haventree.png',
+};
+
+let allData = [], activeTab = 'comparaison';
 
 async function fetchData() {
-  document.getElementById('tab-comparaison').innerHTML = '<div class="loading">Chargement des taux...</div>';
+  document.getElementById('tab-comparaison').innerHTML =
+    '<div class="loading-wrap"><div class="spinner"></div>Chargement des taux...</div>';
   try {
-    const res = await fetch(`${SUPA_URL}/rest/v1/taux_preteurs?select=*&order=date_effectif.desc,preteur.asc,terme.asc&limit=2000`, {
-      headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` }
-    });
-    if (!res.ok) throw new Error('Erreur API Supabase: ' + res.status);
+    const res = await fetch(
+      `${SUPA_URL}/rest/v1/taux_preteurs?select=*&order=date_effectif.desc,preteur.asc,terme.asc&limit=3000`,
+      { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } }
+    );
+    if (!res.ok) throw new Error('Erreur API: ' + res.status);
     allData = await res.json();
-    initFilters();
-    updateStats();
-    render();
-    document.getElementById('last-update').textContent = `Données en temps réel · ${allData.length} entrées · ${new Date().toLocaleString('fr-CA')}`;
+    initFilters(); updateStats(); render();
+    document.getElementById('last-update').textContent =
+      `${allData.length} entrées · ${new Date().toLocaleString('fr-CA')}`;
   } catch(e) {
-    document.getElementById('tab-comparaison').innerHTML = `<div class="error">Impossible de charger les données.<br><small>${e.message}</small></div>`;
+    document.getElementById('tab-comparaison').innerHTML =
+      `<div class="error-wrap">Impossible de charger les données.<br><small>${e.message}</small></div>`;
     document.getElementById('last-update').textContent = 'Erreur de connexion';
   }
 }
 
-function getFilters() {
+function getF() {
   return {
     terme: document.getElementById('f-terme').value,
-    type: document.getElementById('f-type').value,
-    rpv: document.getElementById('f-rpv').value,
-    preteur: document.getElementById('f-preteur').value
+    type:  document.getElementById('f-type').value,
+    trans: document.getElementById('f-transaction').value,
+    rpv:   document.getElementById('f-rpv').value,
+    mont:  document.getElementById('f-montant').value,
+    cote:  document.getElementById('f-cote').value,
+    pret:  document.getElementById('f-preteur').value,
   };
 }
 
 function filtered() {
-  const f = getFilters();
+  const f = getF();
   return allData.filter(r =>
     (!f.terme || r.terme === f.terme) &&
-    (!f.type || r.type_taux === f.type) &&
-    (!f.rpv || r.rpv === f.rpv) &&
-    (!f.preteur || r.preteur === f.preteur)
+    (!f.type  || r.type_taux === f.type) &&
+    (!f.trans || r.type_transaction === f.trans) &&
+    (!f.rpv   || r.rpv === f.rpv) &&
+    (!f.mont  || r.montant_financement === f.mont) &&
+    (!f.cote  || r.cote_credit === f.cote) &&
+    (!f.pret  || r.preteur === f.pret)
   );
 }
 
-const termeOrder = ['6 mois','1 an','2 ans','3 ans','4 ans','5 ans','6 ans','7 ans','10 ans','variable'];
+function resetFilters() {
+  ['f-terme','f-type','f-transaction','f-rpv','f-montant','f-cote','f-preteur']
+    .forEach(id => { document.getElementById(id).value = ''; });
+  updateStats(); render();
+}
 
-function sortTerme(a, b) {
-  return termeOrder.indexOf(a) - termeOrder.indexOf(b);
+const TO = ['6 mois','1 an','1 an convertible','2 ans','3 ans','4 ans','5 ans','6 ans','7 ans','10 ans','variable'];
+function sT(a,b) {
+  const ia=TO.indexOf(a), ib=TO.indexOf(b);
+  if(ia<0&&ib<0) return (a||'').localeCompare(b||'');
+  if(ia<0) return 1; if(ib<0) return -1; return ia-ib;
 }
 
 function initFilters() {
-  const termes = [...new Set(allData.map(r=>r.terme).filter(Boolean))].sort(sortTerme);
-  const rpvs = [...new Set(allData.map(r=>r.rpv).filter(Boolean))].sort();
-  const preteurs = [...new Set(allData.map(r=>r.preteur).filter(Boolean))].sort();
-  const ft = document.getElementById('f-terme');
-  const fr = document.getElementById('f-rpv');
-  const fp = document.getElementById('f-preteur');
-  termes.forEach(t => { const o=document.createElement('option'); o.value=t; o.textContent=t; ft.appendChild(o); });
-  rpvs.forEach(t => { const o=document.createElement('option'); o.value=t; o.textContent=t; fr.appendChild(o); });
-  preteurs.forEach(t => { const o=document.createElement('option'); o.value=t; o.textContent=t; fp.appendChild(o); });
-  ['f-terme','f-type','f-rpv','f-preteur'].forEach(id => {
-    document.getElementById(id).addEventListener('change', () => { updateStats(); render(); });
-  });
+  const uniq = k => [...new Set(allData.map(r=>r[k]).filter(Boolean))];
+  const pop = (id, items) => {
+    const s = document.getElementById(id);
+    items.forEach(v => { const o=document.createElement('option'); o.value=v; o.textContent=v; s.appendChild(o); });
+  };
+  pop('f-terme',       uniq('terme').sort(sT));
+  pop('f-transaction', uniq('type_transaction').sort());
+  pop('f-rpv',         uniq('rpv').sort());
+  pop('f-montant',     uniq('montant_financement').sort());
+  pop('f-cote',        uniq('cote_credit').sort((a,b)=>parseInt(b)-parseInt(a)));
+  pop('f-preteur',     uniq('preteur').sort());
+  ['f-terme','f-type','f-transaction','f-rpv','f-montant','f-cote','f-preteur']
+    .forEach(id => document.getElementById(id).addEventListener('change', ()=>{ updateStats(); render(); }));
 }
 
 function updateStats() {
-  const data = filtered();
-  const preteurs = new Set(data.map(r=>r.preteur));
-  const produits = new Set(data.map(r=>r.produit));
-  const fixeOnly = data.filter(r => r.type_taux==='fixe' && r.taux > 1);
-  const minTaux = fixeOnly.length ? Math.min(...fixeOnly.map(r=>r.taux)) : null;
-  const latest = data.reduce((a,b) => ((a.date_effectif||'') > (b.date_effectif||'') ? a : b), {});
-  document.getElementById('stat-preteurs').textContent = preteurs.size;
-  document.getElementById('stat-produits').textContent = produits.size;
-  document.getElementById('stat-min').textContent = minTaux ? minTaux.toFixed(2)+'%' : '—';
-  document.getElementById('stat-date').textContent = latest.date_effectif || '—';
-}
-
-function fmtTaux(t, type) {
-  if (t === null || t === undefined) return '—';
-  const n = parseFloat(t);
-  if (type === 'variable') {
-    const sign = n >= 0 ? '+' : '';
-    const cls = n < 0 ? 'taux-neg' : 'taux-pos';
-    return `<span class="taux-val ${cls}">${sign}${n.toFixed(2)}%</span>`;
+  const d = filtered();
+  const pts = new Set(d.map(r=>r.preteur));
+  const fx  = d.filter(r => r.type_taux==='fixe' && parseFloat(r.taux)>1);
+  const min = fx.length ? fx.reduce((a,b)=>parseFloat(a.taux)<=parseFloat(b.taux)?a:b) : null;
+  const lat = d.reduce((a,b)=>((a.date_effectif||'')>=(b.date_effectif||'')?a:b),{});
+  document.getElementById('stat-preteurs').textContent = pts.size||'—';
+  document.getElementById('stat-min').textContent      = min ? parseFloat(min.taux).toFixed(2)+'%' : '—';
+  document.getElementById('stat-min-preteur').textContent = min ? '↳ '+min.preteur : '';
+  document.getElementById('stat-date').textContent     = lat.date_effectif||'—';
+  // Logo dans le carré taux le plus bas
+  const logoEl = document.getElementById('stat-min-logo');
+  if (min && LOGOS[min.preteur]) {
+    logoEl.innerHTML = `<div class="logo-box" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.2)"><img src="${LOGOS[min.preteur]}" alt="${min.preteur}" onerror="this.parentElement.style.display='none'"></div>`;
+  } else {
+    logoEl.innerHTML = '';
   }
-  return `<span class="taux-val taux-neu">${n.toFixed(2)}%</span>`;
 }
 
-function badge(type) {
-  return type === 'fixe'
-    ? '<span class="badge badge-fixe">fixe</span>'
-    : '<span class="badge badge-variable">variable</span>';
+function logo(p, lg) {
+  const src = LOGOS[p];
+  const cls = 'logo-box'+(lg?' logo-box-lg':'');
+  if (!src) return `<div class="${cls}" style="background:transparent;border:none"></div>`;
+  return `<div class="${cls}"><img src="${src}" alt="${p}" onerror="this.parentElement.style.visibility='hidden'"></div>`;
+}
+
+function fT(t, type) {
+  if (t==null) return '<span style="color:#ddd">—</span>';
+  const n = parseFloat(t);
+  if (type==='variable') {
+    const s = n>=0?'+':'', cls = n<0?'t-neg':'t-pos';
+    return `<span class="tv ${cls}">P${s}${n.toFixed(2)}%</span>`;
+  }
+  return `<span class="tv t-abs">${n.toFixed(2)}%</span>`;
+}
+
+function bTy(t) {
+  return t==='fixe'
+    ? '<span class="badge b-fixe">Fixe</span>'
+    : '<span class="badge b-var">Variable</span>';
+}
+
+function bTr(t) {
+  const m = {
+    'assuré':       ['b-assure','Assuré'],
+    'assurable':    ['b-assur2','Assurable'],
+    'conventionnel':['b-conv','Conventionnel'],
+    'non assurable':['b-nonass','Non assurable'],
+  };
+  const [c,l] = m[t]||['b-conv', t||'—'];
+  return `<span class="badge ${c}">${l}</span>`;
+}
+
+function ch(v) {
+  return v ? `<span class="chip">${v}</span>` : '<span class="chip-na">—</span>';
 }
 
 function switchTab(tab, el) {
   activeTab = tab;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  ['comparaison','grille','historique'].forEach(t => {
-    document.getElementById('tab-'+t).style.display = t===tab ? 'block' : 'none';
-  });
+  ['comparaison','grille','historique'].forEach(t =>
+    document.getElementById('tab-'+t).style.display = t===tab?'':'none');
   render();
 }
 
 function render() {
-  if (activeTab === 'comparaison') renderComparaison();
-  else if (activeTab === 'grille') renderGrille();
-  else renderHistorique();
+  if (activeTab==='comparaison') renderComp();
+  else if (activeTab==='grille') renderGrille();
+  else renderHist();
 }
 
-function renderComparaison() {
-  const data = filtered();
-  const el = document.getElementById('tab-comparaison');
-  if (!data.length) { el.innerHTML = '<div class="empty">Aucun taux pour ces filtres.</div>'; return; }
-
-  const byTermeType = {};
-  data.forEach(r => {
-    const key = `${r.terme}|||${r.type_taux}`;
-    if (!byTermeType[key]) byTermeType[key] = [];
-    byTermeType[key].push(r);
+function renderComp() {
+  const data = filtered(), el = document.getElementById('tab-comparaison');
+  if (!data.length) { el.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><p>Aucun taux pour ces filtres.</p></div>'; return; }
+  const g={};
+  data.forEach(r=>{ const k=`${r.terme}|||${r.type_taux}`; (g[k]=g[k]||[]).push(r); });
+  const keys=Object.keys(g).sort((a,b)=>{
+    const[ta,tta]=a.split('|||'),[tb,ttb]=b.split('|||');
+    const s=sT(ta,tb); return s!==0?s:(tta==='fixe'?-1:1);
   });
-
-  const keys = Object.keys(byTermeType).sort((a,b) => {
-    const [ta] = a.split('|||'); const [tb] = b.split('|||');
-    return sortTerme(ta, tb);
-  });
-
-  let html = '';
-  keys.forEach(key => {
-    const [terme, type] = key.split('|||');
-    const rows = byTermeType[key];
-    html += `<div class="terme-hdr"><span>${terme}</span>${badge(type)}</div>
-    <div class="tbl-wrap" style="margin-bottom:1.5rem"><table>
-      <tr><th>Prêteur</th><th>Produit</th><th>RPV</th><th>Taux</th><th>En vigueur</th></tr>`;
-    rows.sort((a,b) => {
-      const ta = parseFloat(a.taux)||999, tb = parseFloat(b.taux)||999;
-      return type === 'variable' ? ta - tb : ta - tb;
-    }).forEach(r => {
-      html += `<tr>
-        <td><strong>${r.preteur||'—'}</strong></td>
-        <td style="color:#6b6a65;font-size:12px">${r.produit||'—'}</td>
-        <td><span class="chip">${r.rpv||'—'}</span></td>
-        <td>${fmtTaux(r.taux, r.type_taux)}</td>
-        <td><span class="chip">${r.date_effectif||'—'}</span></td>
-      </tr>`;
+  let h='';
+  keys.forEach(k=>{
+    const[terme,type]=k.split('|||');
+    const rows=g[k].sort((a,b)=>parseFloat(a.taux)-parseFloat(b.taux));
+    h+=`<div class="terme-hdr"><div class="terme-bar"></div><span class="terme-label">${terme}</span>${bTy(type)}<span class="terme-count">${rows.length} offres</span></div>
+    <div class="tbl-wrap"><table>
+    <thead><tr><th>Prêteur</th><th>Produit</th><th>Transaction</th><th>RPV</th><th>Montant</th><th>Cote crédit</th><th>Taux</th><th>En vigueur</th></tr></thead><tbody>`;
+    rows.forEach(r=>{
+      h+=`<tr>
+      <td><div class="preteur-cell">${logo(r.preteur,false)}<span class="preteur-name">${r.preteur||'—'}</span></div></td>
+      <td style="color:var(--gris);font-size:12px;max-width:200px">${r.produit||'—'}</td>
+      <td>${bTr(r.type_transaction)}</td><td>${ch(r.rpv)}</td>
+      <td>${ch(r.montant_financement)}</td><td>${ch(r.cote_credit)}</td>
+      <td>${fT(r.taux,r.type_taux)}</td><td>${ch(r.date_effectif)}</td></tr>`;
     });
-    html += '</table></div>';
+    h+='</tbody></table></div>';
   });
-  el.innerHTML = html;
+  el.innerHTML=h;
 }
 
 function renderGrille() {
-  const data = filtered();
-  const el = document.getElementById('tab-grille');
-  if (!data.length) { el.innerHTML = '<div class="empty">Aucun taux pour ces filtres.</div>'; return; }
-
-  const byPreteur = {};
-  data.forEach(r => {
-    if (!byPreteur[r.preteur]) byPreteur[r.preteur] = [];
-    byPreteur[r.preteur].push(r);
-  });
-
-  let html = '';
-  Object.entries(byPreteur).sort().forEach(([preteur, rows]) => {
-    html += `<div class="section-wrap">
-      <div class="section-title">${preteur}</div>
-      <div class="tbl-wrap"><table>
-        <tr><th>Produit</th><th>Type</th><th>Terme</th><th>RPV</th><th>Taux</th><th>En vigueur</th></tr>`;
-    rows.sort((a,b) => sortTerme(a.terme||'', b.terme||'')).forEach(r => {
-      html += `<tr>
-        <td style="color:#6b6a65;font-size:12px">${r.produit||'—'}</td>
-        <td>${badge(r.type_taux)}</td>
-        <td><strong>${r.terme||'—'}</strong></td>
-        <td><span class="chip">${r.rpv||'—'}</span></td>
-        <td>${fmtTaux(r.taux, r.type_taux)}</td>
-        <td><span class="chip">${r.date_effectif||'—'}</span></td>
-      </tr>`;
+  const data=filtered(), el=document.getElementById('tab-grille');
+  if (!data.length) { el.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><p>Aucun taux pour ces filtres.</p></div>'; return; }
+  const g={};
+  data.forEach(r=>(g[r.preteur]=g[r.preteur]||[]).push(r));
+  let h='';
+  Object.entries(g).sort(([a],[b])=>a.localeCompare(b)).forEach(([p,rows])=>{
+    h+=`<div class="section-wrap">
+    <div class="section-header">${logo(p,true)}<span class="section-name">${p}</span></div>
+    <div class="tbl-wrap"><table>
+    <thead><tr><th>Produit</th><th>Type</th><th>Transaction</th><th>Terme</th><th>RPV</th><th>Montant</th><th>Cote crédit</th><th>Taux</th><th>En vigueur</th></tr></thead><tbody>`;
+    rows.sort((a,b)=>sT(a.terme||'',b.terme||'')).forEach(r=>{
+      h+=`<tr>
+      <td><div class="preteur-cell">${logo(r.preteur,false)}<span style="color:var(--gris);font-size:12px">${r.produit||'—'}</span></div></td>
+      <td>${bTy(r.type_taux)}</td><td>${bTr(r.type_transaction)}</td>
+      <td><strong>${r.terme||'—'}</strong></td><td>${ch(r.rpv)}</td>
+      <td>${ch(r.montant_financement)}</td><td>${ch(r.cote_credit)}</td>
+      <td>${fT(r.taux,r.type_taux)}</td><td>${ch(r.date_effectif)}</td></tr>`;
     });
-    html += '</table></div></div>';
+    h+='</tbody></table></div></div>';
   });
-  el.innerHTML = html;
+  el.innerHTML=h;
 }
 
-function renderHistorique() {
-  const data = filtered();
-  const el = document.getElementById('tab-historique');
-  if (!data.length) { el.innerHTML = '<div class="empty">Aucun taux pour ces filtres.</div>'; return; }
-
-  const byDate = {};
-  data.forEach(r => {
-    const d = r.date_effectif || 'Date inconnue';
-    if (!byDate[d]) byDate[d] = [];
-    byDate[d].push(r);
-  });
-
-  let html = '';
-  Object.entries(byDate).sort((a,b) => b[0].localeCompare(a[0])).forEach(([date, rows]) => {
-    const preteurs = [...new Set(rows.map(r=>r.preteur))].sort().join(', ');
-    html += `<div class="section-wrap">
-      <div class="section-title">${date} <span style="font-size:12px;font-weight:400;color:#6b6a65">(${rows.length} entrées · ${preteurs})</span></div>
-      <div class="tbl-wrap"><table>
-        <tr><th>Prêteur</th><th>Produit</th><th>Type</th><th>Terme</th><th>RPV</th><th>Taux</th></tr>`;
-    rows.sort((a,b) => (a.preteur||'').localeCompare(b.preteur||'')).forEach(r => {
-      html += `<tr>
-        <td><strong>${r.preteur||'—'}</strong></td>
-        <td style="color:#6b6a65;font-size:12px">${r.produit||'—'}</td>
-        <td>${badge(r.type_taux)}</td>
-        <td>${r.terme||'—'}</td>
-        <td><span class="chip">${r.rpv||'—'}</span></td>
-        <td>${fmtTaux(r.taux, r.type_taux)}</td>
-      </tr>`;
+function renderHist() {
+  const data=filtered(), el=document.getElementById('tab-historique');
+  if (!data.length) { el.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><p>Aucun taux pour ces filtres.</p></div>'; return; }
+  const g={};
+  data.forEach(r=>{ const d=r.date_effectif||'Date inconnue'; (g[d]=g[d]||[]).push(r); });
+  let h='';
+  Object.entries(g).sort((a,b)=>b[0].localeCompare(a[0])).forEach(([date,rows])=>{
+    const pts=[...new Set(rows.map(r=>r.preteur))].sort().join(', ');
+    h+=`<div class="section-wrap">
+    <div class="section-header">
+      <span class="section-name" style="font-size:18px">${date}</span>
+      <span class="terme-count">${rows.length} entrées · ${pts}</span>
+    </div>
+    <div class="tbl-wrap"><table>
+    <thead><tr><th>Prêteur</th><th>Produit</th><th>Type</th><th>Transaction</th><th>Terme</th><th>RPV</th><th>Montant</th><th>Taux</th></tr></thead><tbody>`;
+    rows.sort((a,b)=>(a.preteur||'').localeCompare(b.preteur||'')).forEach(r=>{
+      h+=`<tr>
+      <td><div class="preteur-cell">${logo(r.preteur,false)}<span class="preteur-name">${r.preteur||'—'}</span></div></td>
+      <td style="color:var(--gris);font-size:12px">${r.produit||'—'}</td>
+      <td>${bTy(r.type_taux)}</td><td>${bTr(r.type_transaction)}</td>
+      <td>${r.terme||'—'}</td><td>${ch(r.rpv)}</td>
+      <td>${ch(r.montant_financement)}</td><td>${fT(r.taux,r.type_taux)}</td></tr>`;
     });
-    html += '</table></div></div>';
+    h+='</tbody></table></div></div>';
   });
-  el.innerHTML = html;
+  el.innerHTML=h;
 }
 
 fetchData();
