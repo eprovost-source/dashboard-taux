@@ -471,7 +471,6 @@ function renderGrille() {
 }
 
 function renderHist() {
-  // Historique — utilise TOUTES les données (pas filtrées par date récente)
   const el=document.getElementById('tab-historique');
   const f = getF();
   const histData = (window._allDataRaw||allData).filter(r =>
@@ -484,25 +483,30 @@ function renderHist() {
     (!f.pret  || r.preteur === f.pret)
   );
   if (!histData.length) { el.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><p>Aucun taux pour ces filtres.</p></div>'; return; }
-  const g={};
-  histData.forEach(r=>{ const d=r.date_effectif||'Date inconnue'; (g[d]=g[d]||[]).push(r); });
+
+  // Grouper par date effective, puis dédoublonner par prêteur
+  const byDate = {};
+  histData.forEach(r => {
+    const d = r.date_effectif || 'Date inconnue';
+    if (!byDate[d]) byDate[d] = {};
+    byDate[d][r.preteur] = r; // un seul enregistrement par prêteur par date
+  });
+
   let h='';
-  Object.entries(g).sort((a,b)=>b[0].localeCompare(a[0])).forEach(([date,rows])=>{
-    const pts=[...new Set(rows.map(r=>r.preteur))].sort().join(', ');
+  Object.entries(byDate).sort((a,b)=>b[0].localeCompare(a[0])).forEach(([date, preteurs])=>{
+    const rows = Object.values(preteurs).sort((a,b)=>(a.preteur||'').localeCompare(b.preteur||''));
     h+=`<div class="section-wrap">
     <div class="section-header">
       <span class="section-name" style="font-size:18px">${date}</span>
-      <span class="terme-count">${rows.length} entrées · ${pts}</span>
+      <span class="terme-count">${rows.length} prêteurs</span>
     </div>
     <div class="tbl-wrap"><table>
-    <thead><tr><th>Prêteur</th><th>Produit</th><th>Type</th><th>Transaction</th><th>Terme</th><th>RPV</th><th>Montant</th><th>Taux</th></tr></thead><tbody>`;
-    rows.sort((a,b)=>(a.preteur||'').localeCompare(b.preteur||'')).forEach(r=>{
+    <thead><tr><th>Prêteur</th><th>Date effective</th><th>Courriel</th></tr></thead><tbody>`;
+    rows.forEach(r=>{
       h+=`<tr>
       <td><div class="preteur-cell">${logo(r.preteur,false)}<span class="preteur-name">${r.preteur||'—'}</span></div></td>
-      <td style="color:var(--gris);font-size:12px">${r.produit||'—'}</td>
-      <td>${bTy(r.type_taux)}</td><td>${bTr(r.type_transaction)}</td>
-      <td>${r.terme||'—'}</td><td>${ch(r.rpv)}</td>
-      <td>${ch(r.montant_financement)}</td><td>${fT(r.taux,r.type_taux)}</td></tr>`;
+      <td>${ch(r.date_effectif)}</td>
+      <td>${btnCourriel(r.preteur)}</td></tr>`;
     });
     h+='</tbody></table></div></div>';
   });
