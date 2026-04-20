@@ -256,7 +256,7 @@ const LOGOS = {
   'Home Trust':      'logos/hometrust.png',
 };
 
-let allData = [], courriels = {}, activeTab = 'comparaison';
+let allData = [], courriels = {}, historiqueCourrielsByKey = {}, activeTab = 'comparaison';
 
 async function fetchData() {
   document.getElementById('tab-comparaison').innerHTML =
@@ -266,13 +266,23 @@ async function fetchData() {
       fetch(`${SUPA_URL}/rest/v1/taux_preteurs?select=*&order=date_effectif.desc,preteur.asc,terme.asc&limit=5000`,
         { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } }),
       fetch(`${SUPA_URL}/rest/v1/derniers_courriels?select=*`,
-        { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } })
+        { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } }),
     ]);
     if (!resTaux.ok) throw new Error('Erreur API: ' + resTaux.status);
     allData = await resTaux.json();
     const courrielsList = await resCourriels.json();
     courrielsList.forEach(c => { courriels[c.preteur] = c; });
 
+    // Charger historique_courriels
+    try {
+      const resHist = await fetch(`${SUPA_URL}/rest/v1/historique_courriels?select=*&order=date_effectif.desc`,
+        { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } });
+      const histList = await resHist.json();
+      histList.forEach(c => {
+        const key = `${c.preteur}|||${c.date_effectif}`;
+        if (!historiqueCourrielsByKey[key]) historiqueCourrielsByKey[key] = c;
+      });
+    } catch(e) {}
     // Garder seulement la date effective la plus récente par prêteur
     allData = filterLatestDates(allData);
 
@@ -489,7 +499,7 @@ function renderHist() {
   histData.forEach(r => {
     const d = r.date_effectif || 'Date inconnue';
     if (!byDate[d]) byDate[d] = {};
-    byDate[d][r.preteur] = r; // un seul enregistrement par prêteur par date
+    byDate[d][r.preteur] = r;
   });
 
   let h='';
@@ -503,10 +513,15 @@ function renderHist() {
     <div class="tbl-wrap"><table>
     <thead><tr><th>Prêteur</th><th>Date effective</th><th>Courriel</th></tr></thead><tbody>`;
     rows.forEach(r=>{
+      const key = `${r.preteur}|||${r.date_effectif}`;
+      const hasCourriel = !!historiqueCourrielsByKey[key];
+      const btn = hasCourriel
+        ? `<button class="btn-courriel" onclick="openModalHistorique('${r.preteur.replace(/'/g,"\\'")}','${r.date_effectif}')">📧 Courriel</button>`
+        : '';
       h+=`<tr>
       <td><div class="preteur-cell">${logo(r.preteur,false)}<span class="preteur-name">${r.preteur||'—'}</span></div></td>
       <td>${ch(r.date_effectif)}</td>
-      <td>${btnCourriel(r.preteur)}</td></tr>`;
+      <td>${btn}</td></tr>`;
     });
     h+='</tbody></table></div></div>';
   });
@@ -562,6 +577,17 @@ function openModal(preteur) {
   }
   document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+
+function openModalHistorique(preteur, date_effectif) {
+  const key = `${preteur}|||${date_effectif}`;
+  const c = historiqueCourrielsByKey[key];
+  if (!c) return;
+  // Réutiliser openModal en injectant temporairement le bon courriel
+  const saved = courriels[preteur];
+  courriels[preteur] = c;
+  openModal(preteur);
+  courriels[preteur] = saved;
 }
 
 function closeModal(e) {
