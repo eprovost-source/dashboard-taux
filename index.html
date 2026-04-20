@@ -535,7 +535,24 @@ function openModal(preteur) {
 
   const body = document.getElementById('modal-body');
   if (c.email_body_html) {
-    body.innerHTML = `<div class="modal-email-frame" style="padding:1rem">${c.email_body_html}</div>`;
+    // Nettoyer les forwards — garder seulement le dernier message original
+    let emailHtml = c.email_body_html || '';
+    const forwardMarkers = [
+      '---------- Forwarded message ---------',
+      '----------Forwarded message---------',
+      '---------- Message transféré ---------',
+      '---------- Message transmis ---------',
+      'Begin forwarded message',
+    ];
+    let lastIdx = -1;
+    for (const marker of forwardMarkers) {
+      let idx = emailHtml.lastIndexOf(marker);
+      if (idx > lastIdx) lastIdx = idx;
+    }
+    if (lastIdx > -1) {
+      emailHtml = emailHtml.substring(lastIdx);
+    }
+    body.innerHTML = `<div class="modal-email-frame" style="padding:1rem">${emailHtml}</div>`;
   } else {
     body.innerHTML = '<div class="modal-empty">Aucun contenu disponible pour ce prêteur.</div>';
   }
