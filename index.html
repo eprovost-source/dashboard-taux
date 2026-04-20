@@ -517,11 +517,22 @@ function openModal(preteur) {
   const logoEl = document.getElementById('modal-logo');
   logoEl.innerHTML = logo(preteur, false);
   const meta = document.getElementById('modal-meta');
+
+  // Bouton pièce jointe si disponible
+  let btnPJ = '';
+  if (c.piece_jointe_url) {
+    const ext = (c.piece_jointe_nom||'').split('.').pop().toLowerCase();
+    const icon = ext === 'pdf' ? '📄' : ext === 'xlsx' ? '📊' : '🖼️';
+    btnPJ = `<a href="${c.piece_jointe_url}" target="_blank" class="btn-courriel" style="text-decoration:none;margin-left:8px">${icon} Voir la grille</a>`;
+  }
+
   meta.innerHTML = `
     <span class="modal-meta-item"><strong>De :</strong> ${c.email_from||'—'}</span>
     <span class="modal-meta-item"><strong>Sujet :</strong> ${c.email_subject||'—'}</span>
     <span class="modal-meta-item"><strong>En vigueur :</strong> ${c.date_effectif||'—'}</span>
+    ${c.piece_jointe_nom ? `<span class="modal-meta-item"><strong>Pièce jointe :</strong> ${c.piece_jointe_nom}${btnPJ}</span>` : ''}
   `;
+
   const body = document.getElementById('modal-body');
   if (c.email_body_html) {
     body.innerHTML = `<div class="modal-email-frame" style="padding:1rem">${c.email_body_html}</div>`;
