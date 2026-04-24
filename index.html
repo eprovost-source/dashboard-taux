@@ -198,8 +198,6 @@ tbody tr:hover td { background: #fdf8fb; }
     </div>
     <div class="filter-group"><label>Transaction</label><select id="f-transaction"><option value="">Tous</option></select></div>
     <div class="filter-group"><label>RPV</label><select id="f-rpv"><option value="">Tous</option></select></div>
-    <div class="filter-group"><label>Montant</label><select id="f-montant"><option value="">Tous</option></select></div>
-    <div class="filter-group"><label>Cote crédit</label><select id="f-cote"><option value="">Tous</option></select></div>
     <div class="filter-group"><label>Prêteur</label><select id="f-preteur"><option value="">Tous</option></select></div>
     Remove Montant and Cote crédit filter options
     <button class="btn-reset" onclick="resetFilters()">↺ Réinitialiser</button>
@@ -314,8 +312,6 @@ function getF() {
     type:  document.getElementById('f-type').value,
     trans: document.getElementById('f-transaction').value,
     rpv:   document.getElementById('f-rpv').value,
-    mont:  document.getElementById('f-montant').value,
-    cote:  document.getElementById('f-cote').value,
     pret:  document.getElementById('f-preteur').value,
   };
 }
@@ -334,7 +330,7 @@ function filtered() {
 }
 
 function resetFilters() {
-  ['f-terme','f-type','f-transaction','f-rpv','f-montant','f-cote','f-preteur']
+  ['f-terme','f-type','f-transaction','f-rpv','f-preteur']
     .forEach(id => { document.getElementById(id).value = ''; });
   updateStats(); render();
 }
@@ -355,10 +351,8 @@ function initFilters() {
   pop('f-terme',       uniq('terme').sort(sT));
   pop('f-transaction', uniq('type_transaction').sort());
   pop('f-rpv',         uniq('rpv').sort());
-  pop('f-montant',     uniq('montant_financement').sort());
-  pop('f-cote',        uniq('cote_credit').sort((a,b)=>parseInt(b)-parseInt(a)));
   pop('f-preteur',     uniq('preteur').sort());
-  ['f-terme','f-type','f-transaction','f-rpv','f-montant','f-cote','f-preteur']
+  ['f-terme','f-type','f-transaction','f-rpv','f-preteur']
     .forEach(id => document.getElementById(id).addEventListener('change', ()=>{ updateStats(); render(); }));
 }
 
