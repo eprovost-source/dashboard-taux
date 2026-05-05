@@ -236,6 +236,9 @@ tbody tr:hover td { background: #fdf8fb; }
 const SUPA_URL = 'https://oitfhcjqjgeupvosyqja.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pdGZoY2pxamdldXB2b3N5cWphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MzIwOTMsImV4cCI6MjA5MTEwODA5M30.KxIjHqNvMs2WTfUp7fgTuES1cbWsijTCHhVjlN6g4aE';
 
+// Colonnes fetchées — raw_data exclu pour éviter les réponses trop lourdes
+const TAUX_COLS = 'preteur,produit,type_transaction,type_taux,terme,taux,rpv,cote_credit,amortissement,montant_financement,date_effectif,source_email';
+
 const LOGOS = {
   'TD':              'logos/td.png',
   'CIBC':            'logos/cibc.jpg',
@@ -261,7 +264,7 @@ async function fetchData() {
     '<div class="loading-wrap"><div class="spinner"></div>Chargement des taux...</div>';
   try {
     const [resTaux, resCourriels] = await Promise.all([
-      fetch(`${SUPA_URL}/rest/v1/taux_preteurs?select=*&order=date_effectif.desc,preteur.asc,terme.asc&limit=5000`,
+      fetch(`${SUPA_URL}/rest/v1/taux_preteurs?select=${TAUX_COLS}&order=date_effectif.desc,preteur.asc,terme.asc&limit=10000`,
         { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } }),
       fetch(`${SUPA_URL}/rest/v1/derniers_courriels?select=*`,
         { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } }),
@@ -281,6 +284,7 @@ async function fetchData() {
         if (!historiqueCourrielsByKey[key]) historiqueCourrielsByKey[key] = c;
       });
     } catch(e) {}
+
     // Garder seulement la date effective la plus récente par prêteur
     allData = filterLatestDates(allData);
 
@@ -298,11 +302,12 @@ async function fetchData() {
 function filterLatestDates(data) {
   const latestByPreteur = {};
   data.forEach(r => {
+    if (!r.date_effectif) return; // ignorer les dates nulles
     if (!latestByPreteur[r.preteur] || r.date_effectif > latestByPreteur[r.preteur]) {
       latestByPreteur[r.preteur] = r.date_effectif;
     }
   });
-  return data.filter(r => r.date_effectif === latestByPreteur[r.preteur]);
+  return data.filter(r => r.date_effectif && r.date_effectif === latestByPreteur[r.preteur]);
 }
 
 function getF() {
@@ -322,8 +327,6 @@ function filtered() {
     (!f.type  || r.type_taux === f.type) &&
     (!f.trans || r.type_transaction === f.trans) &&
     (!f.rpv   || r.rpv === f.rpv) &&
-    (!f.mont  || r.montant_financement === f.mont) &&
-    (!f.cote  || r.cote_credit === f.cote) &&
     (!f.pret  || r.preteur === f.pret)
   );
 }
@@ -482,8 +485,6 @@ function renderHist() {
     (!f.type  || r.type_taux === f.type) &&
     (!f.trans || r.type_transaction === f.trans) &&
     (!f.rpv   || r.rpv === f.rpv) &&
-    (!f.mont  || r.montant_financement === f.mont) &&
-    (!f.cote  || r.cote_credit === f.cote) &&
     (!f.pret  || r.preteur === f.pret)
   );
   if (!histData.length) { el.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><p>Aucun taux pour ces filtres.</p></div>'; return; }
@@ -548,7 +549,6 @@ function openModal(preteur) {
 
   const body = document.getElementById('modal-body');
   if (c.email_body_html) {
-    // Nettoyer les forwards — garder seulement le dernier message original
     let emailHtml = c.email_body_html || '';
     const forwardMarkers = [
       '---------- Forwarded message ---------',
@@ -577,7 +577,6 @@ function openModalHistorique(preteur, date_effectif) {
   const key = `${preteur}|||${date_effectif}`;
   const c = historiqueCourrielsByKey[key];
   if (!c) return;
-  // Réutiliser openModal en injectant temporairement le bon courriel
   const saved = courriels[preteur];
   courriels[preteur] = c;
   openModal(preteur);
@@ -597,7 +596,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBt
 
 async function fetchAllForHistory() {
   try {
-    const res = await fetch(`${SUPA_URL}/rest/v1/taux_preteurs?select=*&order=date_effectif.desc,preteur.asc&limit=5000`,
+    const res = await fetch(`${SUPA_URL}/rest/v1/taux_preteurs?select=${TAUX_COLS}&order=date_effectif.desc,preteur.asc&limit=10000`,
       { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } });
     window._allDataRaw = await res.json();
   } catch(e) {}
