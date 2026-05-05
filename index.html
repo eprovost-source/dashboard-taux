@@ -21,23 +21,15 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--fond); color: var(--noir); min-height: 100vh; -webkit-font-smoothing: antialiased; }
-
-/* HEADER */
 .header { background: var(--blanc); border-bottom: 1px solid var(--border); padding: 0 2.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; box-shadow: var(--shadow-sm); }
 .header-logo img { height: 36px; width: auto; display: block; }
 .header-right { display: flex; align-items: center; gap: 12px; }
 .header-pill { background: var(--rose-light); color: var(--rose); font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px; letter-spacing: 0.07em; text-transform: uppercase; }
 .header-update { font-size: 12px; color: var(--gris); }
-
-/* HERO */
 .hero { background: var(--blanc); border-bottom: 1px solid var(--border); padding: 2rem 2.5rem 1.75rem; }
 .hero h1 { font-family: 'DM Serif Display', serif; font-size: 34px; color: var(--noir); line-height: 1.15; }
 .hero h1 em { color: var(--rose); font-style: italic; }
-
-/* CONTAINER */
 .container { max-width: 1400px; margin: 0 auto; padding: 2rem 2.5rem; }
-
-/* STATS */
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 2rem; }
 .stat { background: var(--blanc); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; transition: box-shadow 0.2s, transform 0.2s; position: relative; overflow: hidden; }
 .stat::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gris-clair); border-radius: var(--radius) var(--radius) 0 0; }
@@ -47,8 +39,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--fond); color: var(-
 .stat-val { font-size: 28px; font-weight: 700; color: var(--noir); line-height: 1; letter-spacing: -0.02em; }
 .stat.hero-stat .stat-val { color: var(--rose); }
 .stat-sub { font-size: 12px; color: var(--gris); margin-top: 6px; font-weight: 500; }
-
-/* FILTERS */
 .filters-card { background: var(--blanc); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; box-shadow: var(--shadow-sm); }
 .filter-group { display: flex; flex-direction: column; gap: 5px; }
 .filter-group label { font-size: 10px; font-weight: 700; color: var(--gris); text-transform: uppercase; letter-spacing: 0.09em; }
@@ -56,14 +46,10 @@ select { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; 
 select:focus { border-color: var(--rose); background-color: var(--blanc); }
 .btn-reset { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 18px; border: 1.5px solid var(--rose); border-radius: 9px; background: transparent; color: var(--rose); cursor: pointer; transition: all 0.15s; align-self: flex-end; }
 .btn-reset:hover { background: var(--rose); color: var(--blanc); }
-
-/* TABS */
 .tabs-wrap { display: flex; margin-bottom: 1.5rem; background: var(--blanc); border: 1px solid var(--border); border-radius: 12px; padding: 5px; width: fit-content; box-shadow: var(--shadow-sm); }
 .tab { padding: 9px 22px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--gris); border-radius: 9px; transition: all 0.15s; white-space: nowrap; }
 .tab:hover:not(.active) { color: var(--noir); background: var(--fond); }
 .tab.active { background: var(--rose); color: var(--blanc); box-shadow: 0 2px 10px rgba(232,66,124,0.30); }
-
-/* SECTION HEADERS */
 .terme-hdr { display: flex; align-items: center; gap: 10px; margin: 2rem 0 0.9rem; }
 .terme-bar { width: 4px; height: 22px; background: var(--rose); border-radius: 2px; flex-shrink: 0; }
 .terme-label { font-family: 'DM Serif Display', serif; font-size: 19px; color: var(--noir); }
@@ -71,8 +57,6 @@ select:focus { border-color: var(--rose); background-color: var(--blanc); }
 .section-wrap { margin-bottom: 2.5rem; }
 .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1rem; padding-bottom: 12px; border-bottom: 2px solid var(--border); }
 .section-name { font-family: 'DM Serif Display', serif; font-size: 21px; color: var(--noir); }
-
-/* TABLE */
 .tbl-wrap { overflow-x: auto; background: var(--blanc); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); margin-bottom: 1.5rem; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 thead tr { background: var(--fond); }
@@ -81,19 +65,13 @@ td { padding: 11px 16px; border-bottom: 1px solid #f2f2f2; vertical-align: middl
 tr:last-child td { border-bottom: none; }
 tbody tr { transition: background 0.1s; }
 tbody tr:hover td { background: #fdf8fb; }
-
-/* LOGO */
 .preteur-cell { display: flex; align-items: center; gap: 12px; }
 .logo-box { width: 68px; height: 38px; display: flex; align-items: center; justify-content: center; background: var(--fond); border: 1px solid var(--border); border-radius: 8px; flex-shrink: 0; padding: 5px; }
 .logo-box img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; }
 .logo-box-lg { width: 84px; height: 46px; }
 .preteur-name { font-weight: 600; font-size: 13px; color: var(--noir); white-space: nowrap; }
-
-/* BOUTON COURRIEL */
 .btn-courriel { font-size: 11px; font-weight: 600; padding: 4px 10px; border: 1.5px solid var(--rose); border-radius: 20px; background: transparent; color: var(--rose); cursor: pointer; transition: all 0.15s; white-space: nowrap; font-family: 'DM Sans', sans-serif; }
 .btn-courriel:hover { background: var(--rose); color: var(--blanc); }
-
-/* BADGES */
 .badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
 .b-fixe     { background: #e8f4ff; color: #1565c0; }
 .b-var      { background: #fff8e1; color: #e65100; }
@@ -101,18 +79,12 @@ tbody tr:hover td { background: #fdf8fb; }
 .b-assur2   { background: #e3f2fd; color: #0d47a1; }
 .b-conv     { background: #f5f5f5; color: #424242; }
 .b-nonass   { background: #fce4ec; color: #880e4f; }
-
-/* TAUX */
 .tv { font-size: 14px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .t-abs { color: var(--noir); }
 .t-neg { color: #1b8f5c; }
 .t-pos { color: #c04c00; }
-
-/* CHIPS */
 .chip { display: inline-block; font-size: 11px; font-weight: 500; color: var(--gris); background: var(--fond); border: 1px solid var(--border); padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
 .chip-na { color: #ccc; font-style: italic; border-color: transparent; background: transparent; }
-
-/* STATES */
 .empty { text-align: center; padding: 5rem 2rem; color: var(--gris); }
 .empty-ico { font-size: 36px; margin-bottom: 12px; }
 .empty p { font-size: 14px; }
@@ -120,8 +92,6 @@ tbody tr:hover td { background: #fdf8fb; }
 .spinner { width: 20px; height: 20px; border: 2px solid var(--gris-clair); border-top-color: var(--rose); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .error-wrap { padding: 2rem; color: #c62828; font-size: 13px; background: #fff5f5; border-radius: var(--radius); border: 1px solid #ffcdd2; text-align: center; }
-
-/* MODAL */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
 .modal-overlay.open { display: flex; }
 .modal { background: var(--blanc); border-radius: 20px; max-width: 800px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
@@ -137,8 +107,6 @@ tbody tr:hover td { background: #fdf8fb; }
 .modal-body { flex: 1; overflow-y: auto; padding: 1.5rem 1.75rem; }
 .modal-email-frame { width: 100%; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--blanc); }
 .modal-empty { text-align: center; padding: 3rem; color: var(--gris); font-size: 14px; }
-
-@media (max-width: 1100px) { .stats { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 768px) {
   .header { padding: 0 1.25rem; }
   .hero { padding: 1.5rem 1.25rem 1.25rem; }
@@ -213,7 +181,6 @@ tbody tr:hover td { background: #fdf8fb; }
   <div id="tab-historique" style="display:none"></div>
 </div>
 
-<!-- MODAL COURRIEL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-header">
@@ -235,8 +202,6 @@ tbody tr:hover td { background: #fdf8fb; }
 <script>
 const SUPA_URL = 'https://oitfhcjqjgeupvosyqja.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pdGZoY2pxamdldXB2b3N5cWphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MzIwOTMsImV4cCI6MjA5MTEwODA5M30.KxIjHqNvMs2WTfUp7fgTuES1cbWsijTCHhVjlN6g4aE';
-
-// Colonnes fetchées — raw_data exclu pour éviter les réponses trop lourdes
 const TAUX_COLS = 'preteur,produit,type_transaction,type_taux,terme,taux,rpv,cote_credit,amortissement,montant_financement,date_effectif,source_email';
 
 const LOGOS = {
@@ -259,35 +224,49 @@ const LOGOS = {
 
 let allData = [], courriels = {}, historiqueCourrielsByKey = {}, activeTab = 'comparaison';
 
+// Fetch paginé — contourne la limite de lignes Supabase (~1000/page)
+async function fetchAllPages(baseUrl) {
+  let rows = [];
+  let offset = 0;
+  const PAGE = 1000;
+  while (true) {
+    const res = await fetch(`${baseUrl}&limit=${PAGE}&offset=${offset}`, {
+      headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` }
+    });
+    if (!res.ok) throw new Error('Erreur API ' + res.status);
+    const page = await res.json();
+    rows = rows.concat(page);
+    if (page.length < PAGE) break;
+    offset += PAGE;
+  }
+  return rows;
+}
+
 async function fetchData() {
   document.getElementById('tab-comparaison').innerHTML =
     '<div class="loading-wrap"><div class="spinner"></div>Chargement des taux...</div>';
   try {
-    const [resTaux, resCourriels] = await Promise.all([
-      fetch(`${SUPA_URL}/rest/v1/taux_preteurs?select=${TAUX_COLS}&order=date_effectif.desc,preteur.asc,terme.asc&limit=10000`,
-        { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } }),
-      fetch(`${SUPA_URL}/rest/v1/derniers_courriels?select=*`,
-        { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } }),
+    const [allRows, courrielsList] = await Promise.all([
+      fetchAllPages(`${SUPA_URL}/rest/v1/taux_preteurs?select=${TAUX_COLS}&order=date_effectif.desc,preteur.asc,terme.asc`),
+      fetch(`${SUPA_URL}/rest/v1/derniers_courriels?select=*`, {
+        headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` }
+      }).then(r => r.json()),
     ]);
-    if (!resTaux.ok) throw new Error('Erreur API: ' + resTaux.status);
-    allData = await resTaux.json();
-    const courrielsList = await resCourriels.json();
+
     courrielsList.forEach(c => { courriels[c.preteur] = c; });
 
-    // Charger historique_courriels
     try {
-      const resHist = await fetch(`${SUPA_URL}/rest/v1/historique_courriels?select=*&order=date_effectif.desc`,
-        { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } });
-      const histList = await resHist.json();
+      const histList = await fetch(
+        `${SUPA_URL}/rest/v1/historique_courriels?select=*&order=date_effectif.desc`,
+        { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } }
+      ).then(r => r.json());
       histList.forEach(c => {
         const key = `${c.preteur}|||${c.date_effectif}`;
         if (!historiqueCourrielsByKey[key]) historiqueCourrielsByKey[key] = c;
       });
     } catch(e) {}
 
-    // Garder seulement la date effective la plus récente par prêteur
-    allData = filterLatestDates(allData);
-
+    allData = filterLatestDates(allRows);
     initFilters(); updateStats(); render();
     document.getElementById('last-update').textContent =
       `${allData.length} entrées · ${new Date().toLocaleString('fr-CA')}`;
@@ -298,16 +277,13 @@ async function fetchData() {
   }
 }
 
-// Garder seulement les taux avec la date effective la plus récente par prêteur
 function filterLatestDates(data) {
-  const latestByPreteur = {};
+  const latest = {};
   data.forEach(r => {
-    if (!r.date_effectif) return; // ignorer les dates nulles
-    if (!latestByPreteur[r.preteur] || r.date_effectif > latestByPreteur[r.preteur]) {
-      latestByPreteur[r.preteur] = r.date_effectif;
-    }
+    if (!r.date_effectif) return;
+    if (!latest[r.preteur] || r.date_effectif > latest[r.preteur]) latest[r.preteur] = r.date_effectif;
   });
-  return data.filter(r => r.date_effectif && r.date_effectif === latestByPreteur[r.preteur]);
+  return data.filter(r => r.date_effectif && r.date_effectif === latest[r.preteur]);
 }
 
 function getF() {
@@ -332,8 +308,9 @@ function filtered() {
 }
 
 function resetFilters() {
-  ['f-terme','f-type','f-transaction','f-rpv','f-preteur']
-    .forEach(id => { document.getElementById(id).value = ''; });
+  ['f-terme','f-type','f-transaction','f-rpv','f-preteur'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
   updateStats(); render();
 }
 
@@ -354,8 +331,9 @@ function initFilters() {
   pop('f-transaction', uniq('type_transaction').sort());
   pop('f-rpv',         uniq('rpv').sort());
   pop('f-preteur',     uniq('preteur').sort());
-  ['f-terme','f-type','f-transaction','f-rpv','f-preteur']
-    .forEach(id => document.getElementById(id).addEventListener('change', ()=>{ updateStats(); render(); }));
+  ['f-terme','f-type','f-transaction','f-rpv','f-preteur'].forEach(id =>
+    document.getElementById(id).addEventListener('change', () => { updateStats(); render(); })
+  );
 }
 
 function updateStats() {
@@ -383,7 +361,7 @@ function logo(p, lg) {
 
 function btnCourriel(preteur) {
   if (!courriels[preteur]) return '';
-  return `<button class="btn-courriel" onclick="openModal('${preteur.replace(/'/g, "\\'")}')">📧 Courriel</button>`;
+  return `<button class="btn-courriel" onclick="openModal('${preteur.replace(/'/g,"\\'")}')">📧 Courriel</button>`;
 }
 
 function fT(t, type) {
@@ -397,23 +375,33 @@ function fT(t, type) {
 }
 
 function bTy(t) {
-  return t==='fixe' ? '<span class="badge b-fixe">Fixe</span>' : '<span class="badge b-var">Variable</span>';
+  return t==='fixe'
+    ? '<span class="badge b-fixe">Fixe</span>'
+    : '<span class="badge b-var">Variable</span>';
 }
 
 function bTr(t) {
-  const m = { 'assuré':['b-assure','Assuré'], 'assurable':['b-assur2','Assurable'], 'conventionnel':['b-conv','Conventionnel'], 'non assurable':['b-nonass','Non assurable'] };
+  const m = {
+    'assuré':       ['b-assure','Assuré'],
+    'assurable':    ['b-assur2','Assurable'],
+    'conventionnel':['b-conv','Conventionnel'],
+    'non assurable':['b-nonass','Non assurable']
+  };
   const [c,l] = m[t]||['b-conv', t||'—'];
   return `<span class="badge ${c}">${l}</span>`;
 }
 
-function ch(v) { return v ? `<span class="chip">${v}</span>` : '<span class="chip-na">—</span>'; }
+function ch(v) {
+  return v ? `<span class="chip">${v}</span>` : '<span class="chip-na">—</span>';
+}
 
 function switchTab(tab, el) {
   activeTab = tab;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   ['comparaison','grille','historique'].forEach(t =>
-    document.getElementById('tab-'+t).style.display = t===tab?'':'none');
+    document.getElementById('tab-'+t).style.display = t===tab?'':'none'
+  );
   render();
 }
 
@@ -426,21 +414,21 @@ function render() {
 function renderComp() {
   const data = filtered(), el = document.getElementById('tab-comparaison');
   if (!data.length) { el.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><p>Aucun taux pour ces filtres.</p></div>'; return; }
-  const g={};
-  data.forEach(r=>{ const k=`${r.terme}|||${r.type_taux}`; (g[k]=g[k]||[]).push(r); });
-  const keys=Object.keys(g).sort((a,b)=>{
-    const[ta,tta]=a.split('|||'),[tb,ttb]=b.split('|||');
+  const g = {};
+  data.forEach(r => { const k=`${r.terme}|||${r.type_taux}`; (g[k]=g[k]||[]).push(r); });
+  const keys = Object.keys(g).sort((a,b) => {
+    const [ta,tta]=a.split('|||'), [tb,ttb]=b.split('|||');
     const s=sT(ta,tb); return s!==0?s:(tta==='fixe'?-1:1);
   });
-  let h='';
-  keys.forEach(k=>{
-    const[terme,type]=k.split('|||');
-    const rows=g[k].sort((a,b)=>parseFloat(a.taux)-parseFloat(b.taux));
-    h+=`<div class="terme-hdr"><div class="terme-bar"></div><span class="terme-label">${terme}</span>${bTy(type)}<span class="terme-count">${rows.length} offres</span></div>
+  let h = '';
+  keys.forEach(k => {
+    const [terme,type] = k.split('|||');
+    const rows = g[k].sort((a,b) => parseFloat(a.taux)-parseFloat(b.taux));
+    h += `<div class="terme-hdr"><div class="terme-bar"></div><span class="terme-label">${terme}</span>${bTy(type)}<span class="terme-count">${rows.length} offres</span></div>
     <div class="tbl-wrap"><table>
     <thead><tr><th>Prêteur</th><th>Produit</th><th>Transaction</th><th>RPV</th><th>Montant</th><th>Cote crédit</th><th>Taux</th><th>En vigueur</th><th></th></tr></thead><tbody>`;
-    rows.forEach(r=>{
-      h+=`<tr>
+    rows.forEach(r => {
+      h += `<tr>
       <td><div class="preteur-cell">${logo(r.preteur,false)}<span class="preteur-name">${r.preteur||'—'}</span></div></td>
       <td style="color:var(--gris);font-size:12px;max-width:200px">${r.produit||'—'}</td>
       <td>${bTr(r.type_transaction)}</td><td>${ch(r.rpv)}</td>
@@ -448,37 +436,37 @@ function renderComp() {
       <td>${fT(r.taux,r.type_taux)}</td><td>${ch(r.date_effectif)}</td>
       <td>${btnCourriel(r.preteur)}</td></tr>`;
     });
-    h+='</tbody></table></div>';
+    h += '</tbody></table></div>';
   });
-  el.innerHTML=h;
+  el.innerHTML = h;
 }
 
 function renderGrille() {
-  const data=filtered(), el=document.getElementById('tab-grille');
+  const data = filtered(), el = document.getElementById('tab-grille');
   if (!data.length) { el.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><p>Aucun taux pour ces filtres.</p></div>'; return; }
-  const g={};
-  data.forEach(r=>(g[r.preteur]=g[r.preteur]||[]).push(r));
-  let h='';
-  Object.entries(g).sort(([a],[b])=>a.localeCompare(b)).forEach(([p,rows])=>{
-    h+=`<div class="section-wrap">
+  const g = {};
+  data.forEach(r => (g[r.preteur]=g[r.preteur]||[]).push(r));
+  let h = '';
+  Object.entries(g).sort(([a],[b])=>a.localeCompare(b)).forEach(([p,rows]) => {
+    h += `<div class="section-wrap">
     <div class="section-header">${logo(p,true)}<span class="section-name">${p}</span>${btnCourriel(p)}</div>
     <div class="tbl-wrap"><table>
     <thead><tr><th>Produit</th><th>Type</th><th>Transaction</th><th>Terme</th><th>RPV</th><th>Montant</th><th>Cote crédit</th><th>Taux</th><th>En vigueur</th></tr></thead><tbody>`;
-    rows.sort((a,b)=>sT(a.terme||'',b.terme||'')).forEach(r=>{
-      h+=`<tr>
+    rows.sort((a,b) => sT(a.terme||'',b.terme||'')).forEach(r => {
+      h += `<tr>
       <td style="color:var(--gris);font-size:12px;max-width:200px">${r.produit||'—'}</td>
       <td>${bTy(r.type_taux)}</td><td>${bTr(r.type_transaction)}</td>
       <td><strong>${r.terme||'—'}</strong></td><td>${ch(r.rpv)}</td>
       <td>${ch(r.montant_financement)}</td><td>${ch(r.cote_credit)}</td>
       <td>${fT(r.taux,r.type_taux)}</td><td>${ch(r.date_effectif)}</td></tr>`;
     });
-    h+='</tbody></table></div></div>';
+    h += '</tbody></table></div></div>';
   });
-  el.innerHTML=h;
+  el.innerHTML = h;
 }
 
 function renderHist() {
-  const el=document.getElementById('tab-historique');
+  const el = document.getElementById('tab-historique');
   const f = getF();
   const histData = (window._allDataRaw||allData).filter(r =>
     (!f.terme || r.terme === f.terme) &&
@@ -489,7 +477,6 @@ function renderHist() {
   );
   if (!histData.length) { el.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><p>Aucun taux pour ces filtres.</p></div>'; return; }
 
-  // Grouper par date effective, puis dédoublonner par prêteur
   const byDate = {};
   histData.forEach(r => {
     const d = r.date_effectif || 'Date inconnue';
@@ -497,50 +484,46 @@ function renderHist() {
     byDate[d][r.preteur] = r;
   });
 
-  let h='';
-  Object.entries(byDate).sort((a,b)=>b[0].localeCompare(a[0])).forEach(([date, preteurs])=>{
+  let h = '';
+  Object.entries(byDate).sort((a,b)=>b[0].localeCompare(a[0])).forEach(([date, preteurs]) => {
     const rows = Object.values(preteurs).sort((a,b)=>(a.preteur||'').localeCompare(b.preteur||''));
-    h+=`<div class="section-wrap">
+    h += `<div class="section-wrap">
     <div class="section-header">
       <span class="section-name" style="font-size:18px">${date}</span>
       <span class="terme-count">${rows.length} prêteurs</span>
     </div>
     <div class="tbl-wrap"><table>
     <thead><tr><th>Prêteur</th><th>Date effective</th><th>Courriel</th></tr></thead><tbody>`;
-    rows.forEach(r=>{
+    rows.forEach(r => {
       const key = `${r.preteur}|||${r.date_effectif}`;
       const hasCourriel = !!historiqueCourrielsByKey[key];
       const btn = hasCourriel
         ? `<button class="btn-courriel" onclick="openModalHistorique('${r.preteur.replace(/'/g,"\\'")}','${r.date_effectif}')">📧 Courriel</button>`
         : '';
-      h+=`<tr>
+      h += `<tr>
       <td><div class="preteur-cell">${logo(r.preteur,false)}<span class="preteur-name">${r.preteur||'—'}</span></div></td>
       <td>${ch(r.date_effectif)}</td>
       <td>${btn}</td></tr>`;
     });
-    h+='</tbody></table></div></div>';
+    h += '</tbody></table></div></div>';
   });
-  el.innerHTML=h;
+  el.innerHTML = h;
 }
 
-// MODAL
 function openModal(preteur) {
   const c = courriels[preteur];
   if (!c) return;
   document.getElementById('modal-preteur-name').textContent = preteur;
-  const logoEl = document.getElementById('modal-logo');
-  logoEl.innerHTML = logo(preteur, false);
-  const meta = document.getElementById('modal-meta');
+  document.getElementById('modal-logo').innerHTML = logo(preteur, false);
 
-  // Bouton pièce jointe si disponible
   let btnPJ = '';
   if (c.piece_jointe_url) {
     const ext = (c.piece_jointe_nom||'').split('.').pop().toLowerCase();
-    const icon = ext === 'pdf' ? '📄' : ext === 'xlsx' ? '📊' : '🖼️';
+    const icon = ext==='pdf'?'📄':ext==='xlsx'?'📊':'🖼️';
     btnPJ = `<a href="${c.piece_jointe_url}" target="_blank" class="btn-courriel" style="text-decoration:none;margin-left:8px">${icon} Voir la grille</a>`;
   }
 
-  meta.innerHTML = `
+  document.getElementById('modal-meta').innerHTML = `
     <span class="modal-meta-item"><strong>De :</strong> ${c.email_from||'—'}</span>
     <span class="modal-meta-item"><strong>Sujet :</strong> ${c.email_subject||'—'}</span>
     <span class="modal-meta-item"><strong>En vigueur :</strong> ${c.date_effectif||'—'}</span>
@@ -550,7 +533,7 @@ function openModal(preteur) {
   const body = document.getElementById('modal-body');
   if (c.email_body_html) {
     let emailHtml = c.email_body_html || '';
-    const forwardMarkers = [
+    const markers = [
       '---------- Forwarded message ---------',
       '----------Forwarded message---------',
       '---------- Message transféré ---------',
@@ -558,13 +541,8 @@ function openModal(preteur) {
       'Begin forwarded message',
     ];
     let lastIdx = -1;
-    for (const marker of forwardMarkers) {
-      let idx = emailHtml.lastIndexOf(marker);
-      if (idx > lastIdx) lastIdx = idx;
-    }
-    if (lastIdx > -1) {
-      emailHtml = emailHtml.substring(lastIdx);
-    }
+    markers.forEach(m => { const i=emailHtml.lastIndexOf(m); if(i>lastIdx) lastIdx=i; });
+    if (lastIdx > -1) emailHtml = emailHtml.substring(lastIdx);
     body.innerHTML = `<div class="modal-email-frame" style="padding:1rem">${emailHtml}</div>`;
   } else {
     body.innerHTML = '<div class="modal-empty">Aucun contenu disponible pour ce prêteur.</div>';
@@ -592,13 +570,13 @@ function closeModalBtn() {
   document.body.style.overflow = '';
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeModalBtn(); });
 
 async function fetchAllForHistory() {
   try {
-    const res = await fetch(`${SUPA_URL}/rest/v1/taux_preteurs?select=${TAUX_COLS}&order=date_effectif.desc,preteur.asc&limit=10000`,
-      { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } });
-    window._allDataRaw = await res.json();
+    window._allDataRaw = await fetchAllPages(
+      `${SUPA_URL}/rest/v1/taux_preteurs?select=${TAUX_COLS}&order=date_effectif.desc,preteur.asc`
+    );
   } catch(e) {}
 }
 
